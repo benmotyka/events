@@ -1,0 +1,21 @@
+import mongoose from "mongoose";
+
+const userSchema = new mongoose.Schema({
+    email: {
+        type: String,
+        required: true,
+        unique: 'This E-mail is already registered'
+    },
+    password: {
+        type: String,
+        required: true
+    },
+    createdEvents: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Event'
+        }
+    ]
+})
+
+export default mongoose.model('User', userSchema);

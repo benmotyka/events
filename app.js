@@ -5,6 +5,9 @@ import dotenv from "dotenv";
 import { graphqlHTTP } from "express-graphql"; // middleware
 import { buildSchema } from "graphql";
 import Event from "./models/event.js";
+import User from "./models/user.js";
+import bcrypt from "bcryptjs";
+
 dotenv.config();
 
 const app = express();
@@ -25,9 +28,20 @@ app.use(
         date: String!
     }
 
-        type RootQuery {
-            events: [Event!]!
-        }
+    type User {
+        _id: ID!
+        email: String!
+        password: String 
+    }
+
+    input UserInput {
+        email: String!
+        password: String!
+    }
+
+    type RootQuery {
+        events: [Event!]!
+    }
 
     input EventInput {
         title: String!
@@ -38,6 +52,7 @@ app.use(
     
     type RootMutation{
         createEvent(eventInput: EventInput): Event
+        createUser(userInput: UserInput): User
     }
 
     schema {
@@ -46,12 +61,12 @@ app.use(
     }
     `), //valid graphql schema
     rootValue: {
+
       events: () => {
         return Event.find()
           .then((events) => {
             return events.map((event) => {
               return { ...event._doc };
-
             });
           })
           .catch((err) => {
@@ -59,20 +74,46 @@ app.use(
           });
       },
       createEvent: (args) => {
+        let createdEvent;
         const event = new Event({
           title: args.eventInput.title,
           description: args.eventInput.description,
           price: args.eventInput.price,
           date: new Date(args.eventInput.date),
+          creator: "6030fb4ca04219226045c610",
         });
         return event
           .save()
           .then((result) => {
-            console.log(result);
-            return { ...result._doc }; //returns only declared properties, nothing more
+            createdEvent = { ...result._doc };
+            return User.findById("6030fb4ca04219226045c610");
+          })
+          .then((user) => {
+            user.createdEvents.push(event);
+            return user.save();
+          })
+          .then((result) => {
+            return createdEvent;
           })
           .catch((err) => {
             console.log(err);
+            throw err;
+          });
+      },
+      createUser: (args) => {
+        return bcrypt
+          .hash(args.userInput.password, 15)
+          .then((hashedPassword) => {
+            const user = new User({
+              email: args.userInput.email,
+              password: hashedPassword,
+            });
+            return user.save();
+          })
+          .then((result) => {
+            return { ...result._doc, password: null, _id: result.id };
+          })
+          .catch((err) => {
             throw err;
           });
       },
