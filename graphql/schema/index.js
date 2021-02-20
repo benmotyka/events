@@ -1,0 +1,47 @@
+import {buildSchema} from 'graphql';
+
+export default buildSchema(`
+
+schema {
+    query: RootQuery
+    mutation: RootMutation
+}
+
+type RootQuery {
+    events: [Event!]!
+}
+
+type RootMutation{
+    createEvent(eventInput: EventInput): Event
+    createUser(userInput: UserInput): User
+}
+
+type Event {
+    _id: ID!
+    title: String!
+    description: String!
+    price: Float!
+    date: String!
+    creator: User!
+}
+
+type User {
+    _id: ID!
+    email: String!
+    password: String 
+    createdEvents: [Event!]
+}
+
+input UserInput {
+    email: String!
+    password: String!
+}
+
+input EventInput {
+    title: String!
+    description: String!
+    price: Float!
+    date: String!
+}
+
+`)

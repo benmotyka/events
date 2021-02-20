@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import autopopulate from 'mongoose-autopopulate'
 
 const userSchema = new mongoose.Schema({
     email: {
@@ -13,9 +14,13 @@ const userSchema = new mongoose.Schema({
     createdEvents: [
         {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'Event'
+            ref: 'Event',
+      autopopulate: true 
+
         }
     ]
 })
+
+userSchema.plugin(autopopulate);
 
 export default mongoose.model('User', userSchema);

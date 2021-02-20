@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import autopopulate from 'mongoose-autopopulate'
 
 const eventSchema = new mongoose.Schema({
   title: {
@@ -19,8 +20,12 @@ const eventSchema = new mongoose.Schema({
   },
   creator: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User'
+      ref: 'User',
+      autopopulate: true 
   }
 });
+
+eventSchema.plugin(autopopulate);
+
 
 export default mongoose.model('Event', eventSchema);
