@@ -1,5 +1,6 @@
 import Event from "../../models/event.js";
 import User from "../../models/user.js";
+import Booking from "../../models/booking.js";
 import bcrypt from "bcryptjs";
 
 export default {
@@ -10,7 +11,21 @@ export default {
         return { ...event._doc, date: new Date(event._doc.date).toISOString() };
       });
     } catch (error) {
-      throw err;
+      throw error;
+    }
+  },
+  bookings: async () => {
+    try {
+      const bookings = await Booking.find();
+      return bookings.map((booking) => {
+        return {
+          ...booking._doc,
+          createdAt: new Date(booking._doc.createdAt).toISOString(),
+          updatedAt: new Date(booking._doc.createdAt).toISOString(),
+        };
+      });
+    } catch (error) {
+      throw error;
     }
   },
   createEvent: async (args) => {
@@ -45,6 +60,33 @@ export default {
       });
       const result = await user.save();
       return { ...result._doc, password: null, _id: result.id };
+    } catch (error) {
+      throw error;
+    }
+  },
+  bookEvent: async (args) => {
+    const bookedEvent = await Event.findOne({ _id: args.eventId });
+    try {
+      const newBooking = new Booking({
+        user: "6030fb4ca04219226045c610",
+        event: bookedEvent,
+      });
+      const result = await newBooking.save();
+      return {
+        ...result._doc,
+        createdAt: new Date(result._doc.createdAt).toISOString(),
+        updatedAt: new Date(result._doc.createdAt).toISOString(),
+      };
+    } catch (error) {
+      throw error;
+    }
+  },
+  cancelBooking: async (args) => {
+    try {
+      const booking = await Booking.findById(args.bookingId);
+      const event = { ...booking.event._doc };
+      await Booking.deleteOne({ _id: args.bookingId });
+      return event;
     } catch (error) {
       throw error;
     }
