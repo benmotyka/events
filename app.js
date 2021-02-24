@@ -3,8 +3,8 @@ import bodyParser from "body-parser";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import { graphqlHTTP } from "express-graphql"; // middleware
-import graphqlSchema from "./graphql/schema/index.js"
-import graphqlResolvers from "./graphql/resolvers/index.js"
+import graphqlSchema from "./graphql/schema/index.js";
+import graphqlResolvers from "./graphql/resolvers/index.js";
 
 dotenv.config();
 
@@ -15,7 +15,7 @@ app.use(bodyParser.json());
 app.use(
   "/graphql",
   graphqlHTTP({
-    schema: graphqlSchema, 
+    schema: graphqlSchema,
     rootValue: graphqlResolvers,
     graphiql: true,
   })
