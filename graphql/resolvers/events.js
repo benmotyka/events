@@ -17,7 +17,10 @@ export default {
       throw error;
     }
   },
-  createEvent: async (args) => {
+  createEvent: async (args, req) => {
+    if (!req.isAuth) {
+      throw new Error("Unauthenticated!");
+    }
     let createdEvent;
     try {
       const event = new Event({
@@ -25,14 +28,14 @@ export default {
         description: args.eventInput.description,
         price: args.eventInput.price,
         date: new Date(args.eventInput.date),
-        creator: "6030fb4ca04219226045c610",
+        creator: req.userId,
       });
       const result = await event.save();
       createdEvent = {
         ...result._doc,
         date: new Date(event._doc.date).toISOString(),
       };
-      const user = await User.findById("6030fb4ca04219226045c610");
+      const user = await User.findById(req.userId);
       user.createdEvents.push(event);
       await user.save();
       return createdEvent;

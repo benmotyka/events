@@ -4,7 +4,10 @@ import Event from "../../models/event.js";
 import { dateToString } from "../../functions/date.js";
 
 export default {
-  bookings: async () => {
+  bookings: async (args, req) => {
+    if (!req.isAuth) {
+      throw new Error("Unauthenticated!");
+    }
     try {
       const bookings = await Booking.find();
       return bookings.map((booking) => {
@@ -19,11 +22,14 @@ export default {
     }
   },
 
-  bookEvent: async (args) => {
+  bookEvent: async (args, req) => {
+    if (!req.isAuth) {
+      throw new Error("Unauthenticated!");
+    }
     const bookedEvent = await Event.findOne({ _id: args.eventId });
     try {
       const newBooking = new Booking({
-        user: "6030fb4ca04219226045c610",
+        user: req.userId,
         event: bookedEvent,
       });
       const result = await newBooking.save();
@@ -36,7 +42,10 @@ export default {
       throw error;
     }
   },
-  cancelBooking: async (args) => {
+  cancelBooking: async (args, req) => {
+    if (!req.isAuth) {
+      throw new Error("Unauthenticated!");
+    }
     try {
       const booking = await Booking.findById(args.bookingId);
       const event = { ...booking.event._doc };

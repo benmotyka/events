@@ -5,12 +5,14 @@ import dotenv from "dotenv";
 import { graphqlHTTP } from "express-graphql"; // middleware
 import graphqlSchema from "./graphql/schema/index.js";
 import graphqlResolvers from "./graphql/resolvers/index.js";
-
+import verifyToken from "./middleware/verifyToken.js";
 dotenv.config();
 
 const app = express();
 
 app.use(bodyParser.json());
+
+app.use(verifyToken);
 
 app.use(
   "/graphql",

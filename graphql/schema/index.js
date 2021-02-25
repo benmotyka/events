@@ -10,6 +10,7 @@ schema {
 type RootQuery {
     events: [Event!]!
     bookings: [Booking!]!
+    login(email: String!, password: String!): AuthData!
 }
 
 type RootMutation{
@@ -33,6 +34,12 @@ type User {
     email: String!
     password: String 
     createdEvents: [Event!]
+}
+
+type AuthData {
+    userId: ID!
+    token: String!
+    tokenExpiration: Int!
 }
 
 type Booking {
