@@ -9,24 +9,36 @@ import {
   Item,
 } from "./Navbar.styles";
 
+import AuthContext from "../../context/auth-context";
+
 const Navbar = () => {
   return (
-    <NavbarContainer>
-      <NavbarWrapper>
-        <PageName>Events</PageName>
-        <Items>
-          <Item>
-            <Link to="/login">Login</Link>
-          </Item>
-          <Item>
-            <Link to="/events">Events</Link>
-          </Item>
-          <Item>
-            <Link to="/bookings">Bookings</Link>
-          </Item>
-        </Items>
-      </NavbarWrapper>
-    </NavbarContainer>
+    <AuthContext.Consumer>
+      {(context) => {
+        return (
+          <NavbarContainer>
+            <NavbarWrapper>
+              <PageName>Events</PageName>
+              <Items>
+                {!context.token && (
+                  <Item>
+                    <Link to="/login">Login</Link>
+                  </Item>
+                )}
+                <Item>
+                  <Link to="/events">Events</Link>
+                </Item>
+                {context.token && (
+                  <Item>
+                    <Link to="/bookings">Bookings</Link>
+                  </Item>
+                )}
+              </Items>
+            </NavbarWrapper>
+          </NavbarContainer>
+        );
+      }}
+    </AuthContext.Consumer>
   );
 };
 

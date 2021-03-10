@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import axios from "axios";
 import {
   LoginContainer,
@@ -9,8 +9,12 @@ import {
   ButtonsContainer,
 } from "./LoginForm.styles";
 
+import AuthContext from "../../context/auth-context";
+
 function LoginForm() {
   const [values, setValues] = useState({ email: "", password: "" });
+
+  const context = useContext(AuthContext);
 
   const set = (field) => {
     return ({ target: { value } }) => {
@@ -61,7 +65,14 @@ query {
         "http://localhost:8080/graphql",
         requestBody
       );
-      console.log(response.data);
+      const token = response.data.data.login.token;
+      if (token) {
+        context.login(
+          token,
+          response.data.data.login.userId,
+          response.data.data.login.tokenExpiration
+        );
+      }
       setValues({
         email: "",
         password: "",
