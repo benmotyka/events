@@ -30,8 +30,12 @@ const activeClassName = "nav-item-active";
 
 export const Link = styled(NavLink).attrs({ activeClassName })`
   padding: 0 1rem;
+  color: black;
+  text-decoration: none;
   &.${activeClassName} {
     color: red;
   }
 `;
-export const Item = styled.li``;
+export const Item = styled.li`
+  cursor: pointer;
+`;

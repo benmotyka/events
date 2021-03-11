@@ -18,7 +18,9 @@ const Navbar = () => {
         return (
           <NavbarContainer>
             <NavbarWrapper>
-              <PageName>Events</PageName>
+              <PageName>
+                <Link to="/home">Events</Link>
+              </PageName>
               <Items>
                 {!context.token && (
                   <Item>
@@ -29,9 +31,12 @@ const Navbar = () => {
                   <Link to="/events">Events</Link>
                 </Item>
                 {context.token && (
-                  <Item>
-                    <Link to="/bookings">Bookings</Link>
-                  </Item>
+                  <>
+                    <Item>
+                      <Link to="/bookings">Bookings</Link>
+                    </Item>
+                    <Item onClick={context.logout}>Logout</Item>
+                  </>
                 )}
               </Items>
             </NavbarWrapper>
