@@ -1,12 +1,13 @@
 import React from "react";
 
 import LoginForm from "../components/Login/LoginForm";
+import { PageContainer, Header } from "./Pages.styles";
 function Login() {
   return (
-    <div>
-      <h1>login</h1>
+    <PageContainer>
+      <Header>Login</Header>
       <LoginForm />
-    </div>
+    </PageContainer>
   );
 }
 

@@ -4,10 +4,11 @@ import axios from "axios";
 import {
   LoginContainer,
   Input,
-  Button,
   Label,
   ButtonsContainer,
 } from "./LoginForm.styles";
+
+import Button from "../../components/Button/Button";
 
 import AuthContext from "../../context/auth-context";
 
@@ -93,8 +94,8 @@ query {
         onChange={set("password")}
       />
       <ButtonsContainer>
-        <Button onClick={sendRegisterForm}>register</Button>
-        <Button onClick={sendLoginForm}>login</Button>
+        <Button onClick={sendRegisterForm} text="Register" />
+        <Button onClick={sendLoginForm} text="Login" />
       </ButtonsContainer>
     </LoginContainer>
   );

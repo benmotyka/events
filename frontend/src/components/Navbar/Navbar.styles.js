@@ -1,5 +1,7 @@
 import styled from "styled-components";
 import { NavLink } from "react-router-dom";
+import { colors } from "../../common/colors";
+import { SiEventbrite } from "react-icons/si";
 
 export const NavbarContainer = styled.div`
   background-color: #f3f3f3;
@@ -8,16 +10,17 @@ export const NavbarContainer = styled.div`
   align-items: center;
   z-index: 10;
   position: sticky;
+  background-color: ${colors.grey};
 `;
 export const NavbarWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   padding: 0 2rem;
-  max-width: 1200px;
+  max-width: 1000px;
   width: 100%;
   align-items: center;
 `;
-export const PageName = styled.h2`
+export const Logo = styled(SiEventbrite)`
   font-size: 20px;
 `;
 export const Items = styled.ul`
@@ -29,11 +32,18 @@ export const Items = styled.ul`
 const activeClassName = "nav-item-active";
 
 export const Link = styled(NavLink).attrs({ activeClassName })`
-  padding: 0 1rem;
-  color: black;
+  padding: 8px 15px;
+  margin: 0 1rem;
+  border-radius: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: ${colors.white};
+  background-color: ${colors.black};
   text-decoration: none;
   &.${activeClassName} {
-    color: red;
+    background-color: ${colors.yellow};
+    color: ${colors.black};
   }
 `;
 export const Item = styled.li`

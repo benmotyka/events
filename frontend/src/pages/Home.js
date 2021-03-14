@@ -1,10 +1,11 @@
 import React from "react";
+import { PageContainer, Header } from "./Pages.styles";
 
 function Home() {
   return (
-    <div>
-      <h1>home</h1>
-    </div>
+    <PageContainer>
+      <Header>Home page</Header>
+    </PageContainer>
   );
 }
 

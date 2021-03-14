@@ -1,10 +1,11 @@
 import React from "react";
+import { PageContainer, Header } from "./Pages.styles";
 
 function Bookings() {
   return (
-    <div>
-      <h1>Bookings</h1>
-    </div>
+    <PageContainer>
+      <Header>Bookings</Header>
+    </PageContainer>
   );
 }
 

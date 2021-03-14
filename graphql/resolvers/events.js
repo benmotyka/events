@@ -18,6 +18,7 @@ export default {
     }
   },
   createEvent: async (args, req) => {
+    console.log("createEvent");
     if (!req.isAuth) {
       throw new Error("Unauthenticated!");
     }

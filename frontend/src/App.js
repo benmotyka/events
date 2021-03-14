@@ -1,5 +1,3 @@
-import "./App.css";
-
 import { BrowserRouter as Router } from "react-router-dom";
 import Login from "./pages/Login";
 
@@ -29,33 +27,31 @@ function App() {
   };
 
   return (
-    <>
-      <Router>
-        <AuthContext.Provider
-          value={{
-            token: sessionToken,
-            userId: sessionUserId,
-            login: loginFunction,
-            logout: logoutFunction,
-          }}
-        >
-          <Navbar />
+    <Router>
+      <AuthContext.Provider
+        value={{
+          token: sessionToken,
+          userId: sessionUserId,
+          login: loginFunction,
+          logout: logoutFunction,
+        }}
+      >
+        <Navbar />
 
-          <Switch>
-            <Route path="/" component={Home} exact />
-            <Route path="/events" component={Events} exact />
+        <Switch>
+          <Route path="/" component={Home} exact />
+          <Route path="/events" component={Events} exact />
 
-            {!sessionToken && <Route path="/login" component={Login} exact />}
-            {sessionToken && (
-              <Route path="/bookings" component={Bookings} exact />
-            )}
+          {!sessionToken && <Route path="/login" component={Login} exact />}
+          {sessionToken && (
+            <Route path="/bookings" component={Bookings} exact />
+          )}
 
-            {sessionToken && <Redirect to="/events" />}
-            <Redirect to="/" />
-          </Switch>
-        </AuthContext.Provider>
-      </Router>
-    </>
+          {sessionToken && <Redirect to="/events" />}
+          <Redirect to="/" />
+        </Switch>
+      </AuthContext.Provider>
+    </Router>
   );
 }
 

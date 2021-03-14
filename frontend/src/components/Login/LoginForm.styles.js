@@ -1,5 +1,7 @@
 import styled from "styled-components";
 
+import { colors } from "../../common/colors";
+
 export const LoginContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -16,6 +18,7 @@ export const Label = styled.label``;
 
 export const ButtonsContainer = styled.div`
   width: 20%;
+  margin-top: 20px;
   display: flex;
   justify-content: space-evenly;
   align-items: center;

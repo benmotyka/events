@@ -3,7 +3,7 @@ import React from "react";
 import {
   NavbarContainer,
   NavbarWrapper,
-  PageName,
+  Logo,
   Items,
   Link,
   Item,
@@ -18,24 +18,27 @@ const Navbar = () => {
         return (
           <NavbarContainer>
             <NavbarWrapper>
-              <PageName>
-                <Link to="/home">Events</Link>
-              </PageName>
+              <Link to="/home">
+                {" "}
+                <Logo />
+              </Link>
               <Items>
+                <Item>
+                  <Link to="/events">Events</Link>
+                </Item>
                 {!context.token && (
                   <Item>
                     <Link to="/login">Login</Link>
                   </Item>
                 )}
-                <Item>
-                  <Link to="/events">Events</Link>
-                </Item>
                 {context.token && (
                   <>
                     <Item>
                       <Link to="/bookings">Bookings</Link>
                     </Item>
-                    <Item onClick={context.logout}>Logout</Item>
+                    <Item onClick={context.logout}>
+                      <Link to="/logout">Logout</Link>
+                    </Item>
                   </>
                 )}
               </Items>
