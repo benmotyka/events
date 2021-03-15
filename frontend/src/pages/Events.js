@@ -1,9 +1,14 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import Modal from "../components/Modal/Modal";
 import Backdrop from "../components/Modal/Backdrop/Backdrop";
 import axios from "axios";
 
-import { PageContainer } from "./Pages.styles";
+import {
+  PageContainer,
+  EventsContainer,
+  EventItem,
+  EventsList,
+} from "./Pages.styles";
 import Button from "../components/Button/Button";
 import AuthContext from "../context/auth-context";
 
@@ -19,6 +24,18 @@ function Events() {
     description: "",
   });
 
+  const [events, setEvents] = useState([]);
+
+  useEffect(async () => {
+    try {
+      loadEvents();
+    } catch (error) {}
+  }, []);
+
+  const loadEvents = async () => {
+    const loadedEvents = await fetchEvents();
+    setEvents(loadedEvents.data.data.events);
+  };
   const set = (field) => {
     return ({ target: { value } }) => {
       setValues((oldValues) => ({ ...oldValues, [field]: value }));
@@ -31,7 +48,7 @@ function Events() {
 
   const confirmModal = async () => {
     const newEvent = values;
-    // newEvent.price = parseFloat(newEvent.price);
+    newEvent.price = parseFloat(newEvent.price);
     const requestBody = {
       query: `
       mutation {
@@ -42,10 +59,6 @@ function Events() {
           description
           date
           price
-          creator {
-            _id
-            email
-          }
         }
       }
       `,
@@ -57,30 +70,43 @@ function Events() {
         requestBody,
         {
           headers: {
-            Authorization: `Basic ${token}`,
+            Authorization: `Bearer ${token}`,
           },
         }
       );
-
-      console.log(response);
-      // if (token) {
-      //   context.login(
-      //     token,
-      //     response.data.data.login.userId,
-      //     response.data.data.login.tokenExpiration
-      //   );
-      // }
-      // setValues({
-      //   email: "",
-      //   password: "",
-      // });
     } catch (error) {
       console.log(error);
     }
-    //
+    loadEvents();
     setModalShown(false);
     setValues({ title: "", price: 0, date: "", description: "" });
   };
+
+  const fetchEvents = async () => {
+    const requestBody = {
+      query: `
+ query{
+    events {
+      _id
+      title
+      description
+      date
+      price
+    }
+ }
+    `,
+    };
+    try {
+      const response = await axios.post(
+        "http://localhost:8080/graphql",
+        requestBody
+      );
+      return response;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const cancelModal = () => {
     setModalShown(false);
   };
@@ -136,8 +162,15 @@ function Events() {
       )}
       <div>
         <h1>Events</h1>
-        <Button onClick={showModal} text="Create event" />
+        {context.token && <Button onClick={showModal} text="Create event" />}
       </div>
+      <EventsContainer>
+        <EventsList>
+          {events.map((event) => {
+            return <EventItem key={event._id}>{event.title}</EventItem>;
+          })}
+        </EventsList>
+      </EventsContainer>
     </PageContainer>
   );
 }

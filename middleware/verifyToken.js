@@ -23,5 +23,6 @@ export default (req, res, next) => {
     return next();
   }
   req.isAuth = true;
-  req.userId = decodedToken;
+  req.userId = decodedToken.userId;
+  next();
 };
