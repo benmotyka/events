@@ -3,19 +3,17 @@ import Modal from "../components/Modal/Modal";
 import Backdrop from "../components/Modal/Backdrop/Backdrop";
 import axios from "axios";
 
-import {
-  PageContainer,
-  EventsContainer,
-  EventItem,
-  EventsList,
-} from "./Pages.styles";
+import { PageContainer, EventsContainer, EventsList } from "./Pages.styles";
 import Button from "../components/Button/Button";
 import AuthContext from "../context/auth-context";
 
+import EventItem from "../components/Events/EventsList/EventsItem/EventsItem";
 function Events() {
   const context = useContext(AuthContext);
 
   const [modalShown, setModalShown] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [selectedEvent, setSelectedEvent] = useState(null);
 
   const [values, setValues] = useState({
     title: "",
@@ -33,8 +31,10 @@ function Events() {
   }, []);
 
   const loadEvents = async () => {
+    setLoading(true);
     const loadedEvents = await fetchEvents();
     setEvents(loadedEvents.data.data.events);
+    setLoading(false);
   };
   const set = (field) => {
     return ({ target: { value } }) => {
@@ -92,6 +92,10 @@ function Events() {
       description
       date
       price
+      creator{
+        _id
+        email
+      }
     }
  }
     `,
@@ -109,17 +113,28 @@ function Events() {
 
   const cancelModal = () => {
     setModalShown(false);
+    setSelectedEvent(null);
   };
+
+  const showDetails = (eventId) => {
+    const selectedEvent = events.find((e) => e._id === eventId);
+    setSelectedEvent(selectedEvent);
+    console.log(selectedEvent);
+  };
+
+  const bookEvent = () => {};
+
   return (
     <PageContainer>
-      {modalShown && <Backdrop />}
+      {(modalShown || selectedEvent) && <Backdrop />}
       {modalShown && (
         <Modal
-          title="Modal Content"
+          title="Create event"
           cancel
           confirm
           onCancel={cancelModal}
           onConfirm={confirmModal}
+          onConfirmText="Confirm"
         >
           <form>
             <div>
@@ -160,17 +175,49 @@ function Events() {
           </form>
         </Modal>
       )}
+      {selectedEvent && (
+        <Modal
+          title={selectedEvent.title}
+          cancel
+          confirm
+          onCancel={cancelModal}
+          onConfirm={confirmModal}
+          onConfirmText="Book"
+        >
+          <h4>${selectedEvent.price}</h4>
+          <h4>{new Date(selectedEvent.date).toLocaleDateString()}</h4>
+          <h4>{selectedEvent.description}</h4>
+          <h4>Created by: {selectedEvent.creator.email}</h4>
+        </Modal>
+      )}
       <div>
         <h1>Events</h1>
         {context.token && <Button onClick={showModal} text="Create event" />}
       </div>
-      <EventsContainer>
-        <EventsList>
-          {events.map((event) => {
-            return <EventItem key={event._id}>{event.title}</EventItem>;
-          })}
-        </EventsList>
-      </EventsContainer>
+      {loading ? (
+        <p>Loading</p>
+      ) : (
+        <EventsContainer>
+          <EventsList>
+            {events.map((event) => {
+              return (
+                <EventItem
+                  eventId={event._id}
+                  title={event.title}
+                  date={event.date}
+                  price={event.price}
+                  creator={event.creator.email}
+                  userId={context.userId}
+                  creatorId={event.creator._id}
+                  onDetails={() => {
+                    showDetails(event._id);
+                  }}
+                />
+              );
+            })}
+          </EventsList>
+        </EventsContainer>
+      )}
     </PageContainer>
   );
 }

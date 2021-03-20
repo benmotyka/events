@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { colors } from "../common/colors";
 
 export const PageContainer = styled.div`
   display: flex;
@@ -8,7 +9,12 @@ export const PageContainer = styled.div`
 `;
 
 export const EventsContainer = styled.div``;
-export const EventItem = styled.li``;
-export const EventsList = styled.ul``;
+
+export const EventsList = styled.ul`
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
 
 export const Header = styled.h1``;
