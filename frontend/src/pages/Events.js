@@ -119,10 +119,37 @@ function Events() {
   const showDetails = (eventId) => {
     const selectedEvent = events.find((e) => e._id === eventId);
     setSelectedEvent(selectedEvent);
-    console.log(selectedEvent);
   };
 
-  const bookEvent = () => {};
+  const bookEvent = async () => {
+    const requestBody = {
+      query: `
+      mutation{
+        bookEvent(eventId: "${selectedEvent._id}"){
+          _id
+          createdAt
+          updatedAt
+        }
+      }
+    `,
+    };
+    try {
+      // const token = context.token;
+      const response = await axios.post(
+        "http://localhost:8080/graphql",
+        requestBody,
+        {
+          headers: {
+            Authorization: `Bearer ${context.token}`,
+          },
+        }
+      );
+      console.log(response);
+      cancelModal();
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <PageContainer>
@@ -179,9 +206,9 @@ function Events() {
         <Modal
           title={selectedEvent.title}
           cancel
-          confirm
+          confirm={context.token ? true : false}
           onCancel={cancelModal}
-          onConfirm={confirmModal}
+          onConfirm={bookEvent}
           onConfirmText="Book"
         >
           <h4>${selectedEvent.price}</h4>
@@ -202,6 +229,7 @@ function Events() {
             {events.map((event) => {
               return (
                 <EventItem
+                  key={event._id}
                   eventId={event._id}
                   title={event.title}
                   date={event.date}
