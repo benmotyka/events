@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useState, useContext, useEffect } from "react";
 import { PageContainer, Header } from "./Pages.styles";
 import AuthContext from "../context/auth-context";
-
+import BookingList from "../components/Bookings/BookingList/BookingList";
 function Bookings() {
   const context = useContext(AuthContext);
 
@@ -17,12 +17,12 @@ function Bookings() {
 
   const loadBookings = async () => {
     setLoading(true);
-    const loadedBookings = await fetchEvents();
+    const loadedBookings = await fetchBookings();
     setBookings(loadedBookings.data.data.bookings);
     setLoading(false);
   };
 
-  const fetchEvents = async () => {
+  const fetchBookings = async () => {
     const requestBody = {
       query: `
  query{
@@ -56,23 +56,41 @@ function Bookings() {
     }
   };
 
+  const cancelBooking = async (bookingId) => {
+    const requestBody = {
+      query: `
+ mutation{
+    cancelBooking(bookingId: "${bookingId}"){
+      _id
+      title
+    }
+ }
+    `,
+    };
+    try {
+      const token = context.token;
+      const response = await axios.post(
+        "http://localhost:8080/graphql",
+        requestBody,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      loadBookings();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <PageContainer>
       <h1>Your bookings</h1>
       {loading ? (
         <p>Loading</p>
       ) : (
-        <ul>
-          {bookings.map((booking) => {
-            return (
-              <li key={booking._id}>
-                {console.log(booking)}
-                {booking.event.title} -
-                {new Date(booking.createdAt).toLocaleDateString()}
-              </li>
-            );
-          })}
-        </ul>
+        <BookingList bookings={bookings} onCancel={cancelBooking} />
       )}
     </PageContainer>
   );
