@@ -1,3 +1,3 @@
 # events
 
-## GraphQL API + react front (styled components)
+## GraphQL + React (styled components) CRUD project
