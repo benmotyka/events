@@ -26,13 +26,17 @@ function LoginForm() {
   const sendRegisterForm = async () => {
     const requestBody = {
       query: `
-      mutation {
-        createUser(userInput: {email: "${values.email}", password: "${values.password}" }) {
+      mutation Register($email: String!, $password: String!){
+        createUser(userInput: {email: $email, password: $password }) {
           _id
           email
         }
       }     
       `,
+      variables: {
+        email: values.email,
+        password: values.password,
+      },
     };
     try {
       const response = await axios.post(
@@ -52,14 +56,18 @@ function LoginForm() {
   const sendLoginForm = async () => {
     const requestBody = {
       query: `
-query { 
-  login(email: "${values.email}", password: "${values.password}") {
+query Login($email: String!, $password: String!){ 
+  login(email: $email, password: $password) {
     userId
     token
     tokenExpiration
   }
 }  
       `,
+      variables: {
+        email: values.email,
+        password: values.password,
+      },
     };
     try {
       const response = await axios.post(

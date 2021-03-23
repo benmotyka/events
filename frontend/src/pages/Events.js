@@ -51,8 +51,8 @@ function Events() {
     newEvent.price = parseFloat(newEvent.price);
     const requestBody = {
       query: `
-      mutation {
-        createEvent(eventInput: {title: "${newEvent.title}", description: "${newEvent.description}", price: ${newEvent.price}, date: "${newEvent.date}"})
+      mutation CreateEvent($title: String!, $description: String!, $price: Float!, date: String!) {
+        createEvent(eventInput: {title: $title, description: $description, price: $price, date: $date})
         {
           _id
           title
@@ -62,6 +62,12 @@ function Events() {
         }
       }
       `,
+      variables: {
+        title: newEvent.title,
+        descripion: newEvent.description,
+        price: newEvent.price,
+        date: newEvent.date,
+      },
     };
     try {
       const token = context.token;
@@ -124,14 +130,17 @@ function Events() {
   const bookEvent = async () => {
     const requestBody = {
       query: `
-      mutation{
-        bookEvent(eventId: "${selectedEvent._id}"){
+      mutation BookEvent($id: ID!){
+        bookEvent(eventId: $id){
           _id
           createdAt
           updatedAt
         }
       }
     `,
+      variables: {
+        id: selectedEvent._id,
+      },
     };
     try {
       // const token = context.token;

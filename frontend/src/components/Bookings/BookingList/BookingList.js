@@ -7,7 +7,8 @@ function BookingList(props) {
         return (
           <li key={booking._id}>
             <div>
-              {booking.event.title} -
+              {booking.event.title}
+              {" - "}
               {new Date(booking.createdAt).toLocaleDateString()}
             </div>
             <div>
