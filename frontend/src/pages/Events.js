@@ -51,7 +51,7 @@ function Events() {
     newEvent.price = parseFloat(newEvent.price);
     const requestBody = {
       query: `
-      mutation CreateEvent($title: String!, $description: String!, $price: Float!, date: String!) {
+      mutation CreateEvent($title: String!, $description: String!, $price: Float!, $date: String!) {
         createEvent(eventInput: {title: $title, description: $description, price: $price, date: $date})
         {
           _id
@@ -64,7 +64,7 @@ function Events() {
       `,
       variables: {
         title: newEvent.title,
-        descripion: newEvent.description,
+        description: newEvent.description,
         price: newEvent.price,
         date: newEvent.date,
       },

@@ -3,12 +3,13 @@ import React, { useState, useContext, useEffect } from "react";
 import { PageContainer, Header } from "./Pages.styles";
 import AuthContext from "../context/auth-context";
 import BookingList from "../components/Bookings/BookingList/BookingList";
+import Button from "../components/Button/Button";
 function Bookings() {
   const context = useContext(AuthContext);
 
   const [loading, setLoading] = useState(false);
   const [bookings, setBookings] = useState([]);
-
+  const [bookingsView, setBookingsView] = useState("list");
   useEffect(async () => {
     try {
       loadBookings();
@@ -93,7 +94,27 @@ function Bookings() {
       {loading ? (
         <p>Loading</p>
       ) : (
-        <BookingList bookings={bookings} onCancel={cancelBooking} />
+        <>
+          <div>
+            <Button
+              onClick={() => {
+                setBookingsView("list");
+              }}
+              text="List"
+            />
+            <Button
+              onClick={() => {
+                setBookingsView("chart");
+              }}
+              text="Chart"
+            />
+          </div>
+          {bookingsView === "list" ? (
+            <BookingList bookings={bookings} onCancel={cancelBooking} />
+          ) : (
+            <p>chart</p>
+          )}
+        </>
       )}
     </PageContainer>
   );
