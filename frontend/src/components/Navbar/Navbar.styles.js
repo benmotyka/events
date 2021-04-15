@@ -4,16 +4,21 @@ import { colors } from "../../common/colors";
 import { SiEventbrite } from "react-icons/si";
 
 export const NavbarContainer = styled.div`
-  background-color: #f3f3f3;
+  background: ${({ scrollNav }) => (scrollNav ? colors.white : "transparent")};
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 10;
+  margin-top: -80px;
   position: sticky;
-  background-color: ${colors.grey};
+  height: 80px;
+  z-index: 100;
+  transition: all 0.4s ease-in-out;
+  top: 0;
 `;
 export const NavbarWrapper = styled.div`
   display: flex;
+  height: 80px;
   justify-content: space-between;
   padding: 0 2rem;
   max-width: 1000px;
@@ -21,7 +26,7 @@ export const NavbarWrapper = styled.div`
   align-items: center;
 `;
 export const Logo = styled(SiEventbrite)`
-  font-size: 20px;
+  font-size: 25px;
 `;
 export const Items = styled.ul`
   display: flex;
@@ -38,14 +43,15 @@ export const Link = styled(NavLink).attrs({ activeClassName })`
   display: flex;
   justify-content: center;
   align-items: center;
-  color: ${colors.white};
-  background-color: ${colors.black};
+  font-size: 20px;
+
+  color: ${colors.black};
   text-decoration: none;
   &.${activeClassName} {
-    background-color: ${colors.yellow};
-    color: ${colors.black};
+    color: ${colors.purple};
   }
 `;
 export const Item = styled.li`
   cursor: pointer;
+  list-style: none;
 `;

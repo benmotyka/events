@@ -36,8 +36,6 @@ function App() {
           logout: logoutFunction,
         }}
       >
-        <Navbar />
-
         <Switch>
           <Route path="/" component={Home} exact />
           <Route path="/events" component={Events} exact />

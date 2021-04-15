@@ -1,8 +1,9 @@
 import axios from "axios";
 import React, { useState, useContext, useEffect } from "react";
-import { PageContainer, Header } from "./Pages.styles";
+import { PageSectionWrapper, PageSectionContainer } from "./Pages.styles";
 import AuthContext from "../context/auth-context";
 import BookingList from "../components/Bookings/BookingList/BookingList";
+import BookingsChart from "../components/Bookings/BookingsChart/BookingsChart";
 import Button from "../components/Button/Button";
 function Bookings() {
   const context = useContext(AuthContext);
@@ -89,35 +90,42 @@ function Bookings() {
   };
 
   return (
-    <PageContainer>
-      <h1>Your bookings</h1>
-      {loading ? (
-        <p>Loading</p>
-      ) : (
-        <>
-          <div>
-            <Button
-              onClick={() => {
-                setBookingsView("list");
-              }}
-              text="List"
-            />
-            <Button
-              onClick={() => {
-                setBookingsView("chart");
-              }}
-              text="Chart"
-            />
-          </div>
-          {bookingsView === "list" ? (
-            <BookingList bookings={bookings} onCancel={cancelBooking} />
-          ) : (
-            <p>chart</p>
-          )}
-        </>
-      )}
-    </PageContainer>
+    <PageSectionContainer>
+      <PageSectionWrapper borderLeft backgroundImg="background2.jpg">
+        <h1>Your bookings</h1>
+        {loading ? (
+          <p>Loading</p>
+        ) : (
+          <>
+            <div>
+              <Button
+                onClick={() => {
+                  setBookingsView("list");
+                }}
+                text="List"
+              />
+              <Button
+                onClick={() => {
+                  setBookingsView("chart");
+                }}
+                text="Chart"
+              />
+            </div>
+            {bookingsView === "list" ? (
+              <BookingList bookings={bookings} onCancel={cancelBooking} />
+            ) : (
+              <>
+                <p>chart</p>
+                {/* <BookingsChart bookings={bookings} /> */}/
+              </>
+            )}
+          </>
+        )}
+      </PageSectionWrapper>
+    </PageSectionContainer>
   );
 }
 
 export default Bookings;
+
+//ostylowac, dorobic chart

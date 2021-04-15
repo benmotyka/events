@@ -1,30 +1,16 @@
-import styled from "styled-components";
-import { colors } from "../common/colors";
+import styled, { css } from "styled-components";
+import { colors } from "../../common/colors";
 
-export const EventsList = styled.ul`
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin: 0;
-  padding: 200px 0;
-`;
-
-export const Header = styled.h1`
-  margin: 0;
-  padding: 0;
-`;
-
-export const PageContainer = styled.div``;
-
-export const PageSectionContainer = styled.div`
+export const HeroContainer = styled.div``;
+export const HeroSectionContainer = styled.div`
   width: 100%;
+  height: 100vh;
   margin-bottom: ${({ marginBottom }) => (marginBottom ? "200px" : "0")};
   position: relative;
   overflow: hidden;
 `;
 
-export const PageSectionWrapper = styled.div`
+export const HeroSectionWrapper = styled.div`
   background-image: ${({ backgroundImg }) =>
     backgroundImg
       ? `url('./img/backgrounds/${backgroundImg}')`

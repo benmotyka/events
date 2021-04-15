@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import {
   NavbarContainer,
@@ -12,11 +12,23 @@ import {
 import AuthContext from "../../context/auth-context";
 
 const Navbar = () => {
+  const [scrollNav, setScrollNav] = useState(false);
+  useEffect(() => {
+    window.addEventListener("scroll", changeNav);
+  }, []);
+  const changeNav = () => {
+    if (window.scrollY >= 150) {
+      setScrollNav(true);
+    } else {
+      setScrollNav(false);
+    }
+  };
+
   return (
     <AuthContext.Consumer>
       {(context) => {
         return (
-          <NavbarContainer>
+          <NavbarContainer scrollNav={scrollNav}>
             <NavbarWrapper>
               <Link to="/home">
                 {" "}
@@ -26,11 +38,6 @@ const Navbar = () => {
                 <Item>
                   <Link to="/events">Events</Link>
                 </Item>
-                {!context.token && (
-                  <Item>
-                    <Link to="/login">Login</Link>
-                  </Item>
-                )}
                 {context.token && (
                   <>
                     <Item>
@@ -42,6 +49,11 @@ const Navbar = () => {
                   </>
                 )}
               </Items>
+              {!context.token && (
+                <Item>
+                  <Link to="/login">Login</Link>
+                </Item>
+              )}
             </NavbarWrapper>
           </NavbarContainer>
         );

@@ -3,11 +3,16 @@ import Modal from "../components/Modal/Modal";
 import Backdrop from "../components/Modal/Backdrop/Backdrop";
 import axios from "axios";
 
-import { PageContainer, EventsContainer, EventsList } from "./Pages.styles";
+import {
+  PageSectionWrapper,
+  PageSectionContainer,
+  EventsList,
+} from "./Pages.styles";
 import Button from "../components/Button/Button";
 import AuthContext from "../context/auth-context";
 
 import EventItem from "../components/Events/EventsList/EventsItem/EventsItem";
+import Navbar from "../components/Navbar/Navbar";
 function Events() {
   const context = useContext(AuthContext);
 
@@ -161,101 +166,105 @@ function Events() {
   };
 
   return (
-    <PageContainer>
-      {(modalShown || selectedEvent) && <Backdrop />}
-      {modalShown && (
-        <Modal
-          title="Create event"
-          cancel
-          confirm
-          onCancel={cancelModal}
-          onConfirm={confirmModal}
-          onConfirmText="Confirm"
-        >
-          <form>
-            <div>
-              <label htmlFor="title">Title</label>
-              <input
-                type="text"
-                id="title"
-                value={values.title}
-                onChange={set("title")}
-              />
-            </div>
-            <div>
-              <label htmlFor="price">Price</label>
-              <input
-                type="number"
-                id="price"
-                value={values.price}
-                onChange={set("price")}
-              />
-            </div>{" "}
-            <div>
-              <label htmlFor="date">Date</label>
-              <input
-                type="datetime-local"
-                id="date"
-                value={values.date}
-                onChange={set("date")}
-              />
-            </div>{" "}
-            <div>
-              <label htmlFor="description">Description</label>
-              <textarea
-                id="description"
-                value={values.description}
-                onChange={set("description")}
-              />
-            </div>
-          </form>
-        </Modal>
-      )}
-      {selectedEvent && (
-        <Modal
-          title={selectedEvent.title}
-          cancel
-          confirm={context.token ? true : false}
-          onCancel={cancelModal}
-          onConfirm={bookEvent}
-          onConfirmText="Book"
-        >
-          <h4>${selectedEvent.price}</h4>
-          <h4>{new Date(selectedEvent.date).toLocaleDateString()}</h4>
-          <h4>{selectedEvent.description}</h4>
-          <h4>Created by: {selectedEvent.creator.email}</h4>
-        </Modal>
-      )}
-      <div>
-        <h1>Events</h1>
-        {context.token && <Button onClick={showModal} text="Create event" />}
-      </div>
-      {loading ? (
-        <p>Loading</p>
-      ) : (
-        <EventsContainer>
-          <EventsList>
-            {events.map((event) => {
-              return (
-                <EventItem
-                  key={event._id}
-                  eventId={event._id}
-                  title={event.title}
-                  date={event.date}
-                  price={event.price}
-                  creator={event.creator.email}
-                  userId={context.userId}
-                  creatorId={event.creator._id}
-                  onDetails={() => {
-                    showDetails(event._id);
-                  }}
-                />
-              );
-            })}
-          </EventsList>
-        </EventsContainer>
-      )}
-    </PageContainer>
+    <div>
+      <Navbar sticky />
+      <PageSectionContainer>
+        <PageSectionWrapper borderRight backgroundImg="background2.jpg">
+          {(modalShown || selectedEvent) && <Backdrop />}
+          {modalShown && (
+            <Modal
+              title="Create event"
+              cancel
+              confirm
+              onCancel={cancelModal}
+              onConfirm={confirmModal}
+              onConfirmText="Confirm"
+            >
+              <form>
+                <div>
+                  <label htmlFor="title">Title</label>
+                  <input
+                    type="text"
+                    id="title"
+                    value={values.title}
+                    onChange={set("title")}
+                  />
+                </div>
+                <div>
+                  <label htmlFor="price">Price</label>
+                  <input
+                    type="number"
+                    id="price"
+                    value={values.price}
+                    onChange={set("price")}
+                  />
+                </div>{" "}
+                <div>
+                  <label htmlFor="date">Date</label>
+                  <input
+                    type="datetime-local"
+                    id="date"
+                    value={values.date}
+                    onChange={set("date")}
+                  />
+                </div>{" "}
+                <div>
+                  <label htmlFor="description">Description</label>
+                  <textarea
+                    id="description"
+                    value={values.description}
+                    onChange={set("description")}
+                  />
+                </div>
+              </form>
+            </Modal>
+          )}
+          {selectedEvent && (
+            <Modal
+              title={selectedEvent.title}
+              cancel
+              confirm={context.token ? true : false}
+              onCancel={cancelModal}
+              onConfirm={bookEvent}
+              onConfirmText="Book"
+            >
+              <h4>${selectedEvent.price}</h4>
+              <h4>{new Date(selectedEvent.date).toLocaleDateString()}</h4>
+              <h4>{selectedEvent.description}</h4>
+              <h4>Created by: {selectedEvent.creator.email}</h4>
+            </Modal>
+          )}
+          <div>
+            {context.token && (
+              <Button onClick={showModal} text="Create event" />
+            )}
+          </div>
+          {loading ? (
+            <p>Loading</p>
+          ) : (
+            <EventsList>
+              {events.map((event) => {
+                return (
+                  <EventItem
+                    key={event._id}
+                    eventId={event._id}
+                    title={event.title}
+                    date={event.date}
+                    price={event.price}
+                    creator={event.creator.email}
+                    userId={context.userId}
+                    creatorId={event.creator._id}
+                    onDetails={() => {
+                      showDetails(event._id);
+                    }}
+                  />
+                );
+              })}
+            </EventsList>
+          )}
+        </PageSectionWrapper>
+      </PageSectionContainer>
+    </div>
   );
 }
 
